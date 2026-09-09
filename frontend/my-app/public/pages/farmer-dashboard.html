@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Dashboard - KrishiShell</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="loadFarmerCrops()">
+
+  <header class="navbar">
+    <a href="../index.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+    <div class="nav-links">
+      <a href="farmer-dashboard.html" class="active">My Crops</a>
+      <a href="add-crop.html" class="btn btn-outline btn-sm">+ Add Crop</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="dashboard-header">
+      <div>
+        <h2 class="text-primary">Farmer Portal</h2>
+        <p class="text-muted">Manage your current harvest and compare market prices.</p>
+      </div>
+      <a href="add-crop.html" class="btn btn-primary">+ Add New Produce</a>
+    </div>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h4>My Listed Crops</h4>
+        <div class="val" id="statCropCount">0 Items</div>
+      </div>
+      <div class="stat-card">
+        <h4>Active Buyer Demands</h4>
+        <div class="val" id="statDemandCount">0 Buyers</div>
+      </div>
+      <div class="stat-card">
+        <h4>Current Avg. Mandi Rate</h4>
+        <div class="val" id="statAvgRate">₹0 / kg</div>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <h3>Your Current Harvest Listings</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Crop Name</th>
+            <th>Quantity (kg)</th>
+            <th>Location</th>
+            <th>Expected Date</th>
+            <th>Match Action</th>
+          </tr>
+        </thead>
+        <tbody id="cropTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/farmer.js"></script>
+</body>
+</html>

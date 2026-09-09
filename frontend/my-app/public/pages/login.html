@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - KrishiShell</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="setupSelectedRole()">
+
+  <header class="navbar">
+    <a href="../index.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+    <a href="../index.html" class="btn btn-outline btn-sm">Change Role</a>
+  </header>
+
+  <div class="container form-card-container">
+    <div class="card-box">
+      <h2 id="loginTitle" class="text-primary text-center">Login</h2>
+      <p id="loginSubtitle" class="text-center text-muted" style="margin-bottom: 20px;">Please sign in to proceed.</p>
+      
+      <form onsubmit="handleLogin(event)">
+        <input type="hidden" id="userRole" value="farmer">
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="userName" placeholder="e.g. Shubham Jha" required>
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number / Email</label>
+          <input type="text" id="userContact" placeholder="e.g. 9876543210" required>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="userPass" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Continue to Dashboard</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    function setupSelectedRole() {
+      const params = new URLSearchParams(window.location.search);
+      const role = params.get('role');
+      const hiddenRole = document.getElementById('userRole');
+      const titleElem = document.getElementById('loginTitle');
+
+      if (role === 'buyer') {
+        hiddenRole.value = 'buyer';
+        titleElem.innerText = 'Buyer Login';
+      } else {
+        hiddenRole.value = 'farmer';
+        titleElem.innerText = 'Farmer Login';
+      }
+    }
+  </script>
+</body>
+</html>

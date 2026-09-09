@@ -1,13 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-app</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrishiShell</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="/index.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+  </header>
+
+  <main class="container hero-section">
+    <div class="hero-card">
+      <h1 class="hero-title">Welcome to KrishiShell</h1>
+      <p class="hero-desc">
+        Connecting Farmers directly with Buyers. Smart Agricultural Marketplace for fair pricing and transparent trade.
+      </p>
+
+      <div class="cta-group">
+        <a href="/pages/login.html?role=farmer" class="btn btn-primary">I am a Farmer</a>
+        <a href="/pages/login.html?role=buyer" class="btn btn-secondary">I am a Buyer</a>
+      </div>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-box">
+        <h3>Direct Selling</h3>
+        <p>Farmers can list their produce directly without middlemen and get real-time mandi prices.</p>
+      </div>
+
+      <div class="feature-box">
+        <h3>Bulk Buying</h3>
+        <p>Wholesalers and retailers can post crop requirements and connect directly with local farmers.</p>
+      </div>
+
+      <div class="feature-box">
+        <h3>Market Analytics</h3>
+        <p>Real-time price recommendations and demand forecasting to maximize profits.</p>
+      </div>
+    </div>
+  </main>
+
+</body>
 </html>

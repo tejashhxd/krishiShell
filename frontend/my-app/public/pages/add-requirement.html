@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Demand - KrishiShell</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="buyer-dashboard.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+    <a href="buyer-dashboard.html" class="btn btn-outline btn-sm">Back to Dashboard</a>
+  </header>
+
+  <main class="container form-card-container">
+    <div class="card-box">
+      <h2 class="text-primary">Post Crop Requirement</h2>
+      <p class="text-muted" style="margin-bottom: 20px; font-size: 14px;">
+        Farmers will see your price offer and match their harvest.
+      </p>
+
+      <form onsubmit="handleAddRequirement(event)">
+        <div class="form-group">
+          <label for="reqCrop">Crop Needed</label>
+          <select id="reqCrop" required>
+            <option value="Tomato">Tomato</option>
+            <option value="Potato">Potato</option>
+            <option value="Onion">Onion</option>
+            <option value="Wheat">Wheat</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reqQty">Required Quantity (in kg)</label>
+          <input type="number" id="reqQty" placeholder="e.g. 1000" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reqPrice">Offered Price (₹ / kg)</label>
+          <input type="number" id="reqPrice" placeholder="e.g. 24" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reqLocation">Delivery Mandi / Hub Location</label>
+          <input type="text" id="reqLocation" placeholder="e.g. Howrah Market" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Broadcast Requirement</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="../js/buyer.js"></script>
+</body>
+</html>

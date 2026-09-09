@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Market Matches - KrishiShell</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="loadMatchResults()">
+
+  <header class="navbar">
+    <a href="farmer-dashboard.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+    <a href="farmer-dashboard.html" class="btn btn-outline btn-sm">Back to Dashboard</a>
+  </header>
+
+  <main class="container">
+    <div class="dashboard-header">
+      <div>
+        <h2 id="cropTitle" class="text-primary">Matching Buyers & Mandi Rates</h2>
+        <p class="text-muted">Calculated based on buyer price, distance, and estimated transport deductions.</p>
+      </div>
+    </div>
+
+    <div class="results-grid" id="resultsList"></div>
+  </main>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

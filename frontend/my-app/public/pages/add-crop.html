@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Crop - KrishiShell</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="updateMandiRateBadge()">
+
+  <header class="navbar">
+    <a href="farmer-dashboard.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+    <a href="farmer-dashboard.html" class="btn btn-outline btn-sm">Back to Dashboard</a>
+  </header>
+
+  <main class="container form-card-container">
+    <div class="card-box">
+      <h2 class="text-primary">List Crop for Market Match</h2>
+      <p class="text-muted" style="margin-bottom: 20px; font-size: 14px;">
+        Provide produce details to compare buyers and mandi rates.
+      </p>
+
+      <form onsubmit="handleAddCrop(event)">
+        <div class="form-group">
+          <label for="cropName">Crop Name</label>
+          <select id="cropName" onchange="updateMandiRateBadge()" required>
+            <option value="Tomato">Tomato</option>
+            <option value="Potato">Potato</option>
+            <option value="Onion">Onion</option>
+            <option value="Wheat">Wheat</option>
+            <option value="Mustard">Mustard</option>
+          </select>
+          
+          <div class="live-rate-badge">
+            <span>Official APMC Mandi Rate:</span>
+            <strong id="liveMandiPrice">₹32 / kg</strong>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cropQty">Available Quantity (in kg)</label>
+          <input type="number" id="cropQty" placeholder="e.g. 500" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cropLocation">Farm / Mandi Location</label>
+          <input type="text" id="cropLocation" placeholder="e.g. Pune, Maharashtra" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cropDate">Expected Ready Date</label>
+          <input type="date" id="cropDate" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Find Best Matching Buyers</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/farmer.js"></script>
+</body>
+</html>

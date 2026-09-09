@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buyer Dashboard - KrishiShell</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body onload="loadBuyerReqs()">
+
+  <header class="navbar">
+    <a href="../index.html" class="logo">
+      <span class="logo-icon"></span>
+      KrishiShell
+    </a>
+    <div class="nav-links">
+      <a href="add-requirement.html" class="btn btn-outline btn-sm">+ Post Demand</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="dashboard-header">
+      <div>
+        <h2 class="text-primary">Buyer Requirements</h2>
+        <p class="text-muted">View crops you have requested from local farmers.</p>
+      </div>
+      <a href="add-requirement.html" class="btn btn-primary">+ New Requirement</a>
+    </div>
+
+    <section class="table-card">
+      <h3>Active Crop Demands</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Required Crop</th>
+            <th>Required Quantity</th>
+            <th>Offered Price (per kg)</th>
+            <th>Target Location</th>
+          </tr>
+        </thead>
+        <tbody id="reqTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/buyer.js"></script>
+</body>
+</html>
