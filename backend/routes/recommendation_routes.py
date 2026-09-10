@@ -85,18 +85,28 @@ def analyze():
 
     prices = get_latest_prices_for_crop(crop_id)
     ranked = rank_markets(prices, latitude, longitude, quantity)
-    if not ranked:
+    profitable = [
+        result for result in ranked
+        if result["net_price_per_kg"] > 0
+        and result["estimated_net_realisation"] > 0
+    ]
+    if not profitable:
         return jsonify({
-            "error": "No suitable markets found for this crop."
-        }), 404
+            "crop": crop.name,
+            "quantity_kg": quantity,
+            "recommendation": None,
+            "alternatives": [],
+            "explanation": "No profitable markets found after transportation costs.",
+            "trend": None,
+        }), 200
 
-    recommendation = ranked[0]
+    recommendation = profitable[0]
     explanation = (
         f'{recommendation["market_name"]} is recommended because it has the '
         "highest estimated net realisation after transportation costs."
     )
-    if len(ranked) > 1 and (
-        ranked[1]["modal_price_per_quintal"]
+    if len(profitable) > 1 and (
+        profitable[1]["modal_price_per_quintal"]
         > recommendation["modal_price_per_quintal"]
     ):
         explanation = (
@@ -109,7 +119,7 @@ def analyze():
         "crop": crop.name,
         "quantity_kg": quantity,
         "recommendation": _serialize(recommendation),
-        "alternatives": [_serialize(result) for result in ranked[1:]],
+        "alternatives": [_serialize(result) for result in profitable[1:]],
         "explanation": explanation,
         "trend": None,
     }), 200
