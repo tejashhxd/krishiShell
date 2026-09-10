@@ -1,9 +1,46 @@
-from flask import Blueprint, jsonify
+import requests
+from flask import Blueprint, jsonify, request
 from extentions import db
 from models.crop import Crop
 from models.market import Market
 
 market_bp = Blueprint("market", __name__, url_prefix="/api")
+
+
+@market_bp.get("/geocode")
+def geocode_location():
+    location = request.args.get("location", "").strip()
+    if not location:
+        return jsonify({"error": "A location is required."}), 400
+
+    try:
+        response = requests.get(
+            "https://nominatim.openstreetmap.org/search",
+            params={
+                "q": f"{location}, Maharashtra, India",
+                "format": "json",
+                "limit": 1,
+                "countrycodes": "in",
+            },
+            headers={"User-Agent": "KrishiSell/1.0"},
+            timeout=10,
+        )
+        response.raise_for_status()
+    except requests.RequestException:
+        return jsonify({"error": "Unable to resolve the entered location."}), 502
+
+    results = response.json()
+    if not results:
+        return jsonify({"error": f"Location not found: {location}"}), 404
+
+    return jsonify({
+        "success": True,
+        "data": {
+            "latitude": float(results[0]["lat"]),
+            "longitude": float(results[0]["lon"]),
+            "display_name": results[0].get("display_name"),
+        },
+    }), 200
 
 @market_bp.route("/crops", methods=["GET"])
 def get_crops():

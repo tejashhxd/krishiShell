@@ -6,7 +6,11 @@ function handleLogin(event) {
   const contact = document.getElementById("userContact").value.trim();
 
   if (!name || !contact) {
-    alert("Please enter both Name and Contact details.");
+    const messageElement = document.getElementById("loginMessage");
+    if (messageElement) {
+      messageElement.textContent = "Please enter both Name and Contact details.";
+      messageElement.classList.add("visible");
+    }
     return;
   }
 

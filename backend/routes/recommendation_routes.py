@@ -1,6 +1,7 @@
 from math import isfinite
 
 from flask import Blueprint, jsonify, request
+from sqlalchemy import func
 
 from extentions import db
 from models.crop import Crop
@@ -45,12 +46,20 @@ def analyze():
         return jsonify({"error": "Request body must be a JSON object."}), 400
 
     crop_id = payload.get("crop_id")
+    crop_name = payload.get("crop_name")
     if isinstance(crop_id, bool):
         crop_id = None
-    try:
-        crop_id = int(crop_id)
-    except (TypeError, ValueError):
-        crop_id = None
+    if crop_id is not None:
+        try:
+            crop_id = int(crop_id)
+        except (TypeError, ValueError):
+            crop_id = None
+
+    if crop_id is None and isinstance(crop_name, str) and crop_name.strip():
+        crop = Crop.query.filter(
+            func.lower(Crop.name) == crop_name.strip().lower()
+        ).first()
+        crop_id = crop.id if crop else None
 
     quantity = _number(payload, "quantity_kg")
     latitude = _number(payload, "latitude")
@@ -58,7 +67,7 @@ def analyze():
 
     if crop_id is None or quantity is None or quantity <= 0:
         return jsonify({
-            "error": "crop_id and a positive quantity_kg are required."
+            "error": "crop_id or crop_name and a positive quantity_kg are required."
         }), 400
     if (
         latitude is None

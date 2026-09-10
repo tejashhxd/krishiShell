@@ -99,6 +99,12 @@ body {
   color: var(--primary);
 }
 
+.btn-danger {
+  border: 1.5px solid #c62828;
+  background: transparent;
+  color: #c62828;
+}
+
 .btn-sm {
   padding: 6px 14px;
   font-size: 13px;
@@ -199,6 +205,21 @@ body {
   font-size: 14px;
 }
 
+.form-message {
+  display: none;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-left: 4px solid #c62828;
+  border-radius: 4px;
+  background: #ffebee;
+  color: #b71c1c;
+  font-size: 14px;
+}
+
+.form-message.visible {
+  display: block;
+}
+
 .live-rate-badge {
   background: #e8f5e9;
   border-left: 4px solid var(--primary);
@@ -272,6 +293,12 @@ th {
   font-weight: 600;
 }
 
+.table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .results-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -285,6 +312,22 @@ th {
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.recommended-card {
+  border: 2px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.18);
+}
+
+.market-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #e8f5e9;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
 .buyer-price {

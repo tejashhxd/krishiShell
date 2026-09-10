@@ -6,7 +6,7 @@
   <title>Add Crop - KrishiShell</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body onload="updateMandiRateBadge()">
+<body onload="loadCropOptions()">
 
   <header class="navbar">
     <a href="farmer-dashboard.html" class="logo">
@@ -27,11 +27,7 @@
         <div class="form-group">
           <label for="cropName">Crop Name</label>
           <select id="cropName" onchange="updateMandiRateBadge()" required>
-            <option value="Tomato">Tomato</option>
-            <option value="Potato">Potato</option>
-            <option value="Onion">Onion</option>
-            <option value="Wheat">Wheat</option>
-            <option value="Mustard">Mustard</option>
+            <option value="">Loading crops...</option>
           </select>
           
           <div class="live-rate-badge">
@@ -55,6 +51,7 @@
           <input type="date" id="cropDate" required>
         </div>
 
+        <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
         <button type="submit" class="btn btn-primary btn-full">Find Best Matching Buyers</button>
       </form>
     </div>

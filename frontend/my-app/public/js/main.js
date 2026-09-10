@@ -2,63 +2,40 @@ async function loadMatchResults() {
   const container = document.getElementById("resultsList");
   if (!container) return;
 
-  const params = new URLSearchParams(window.location.search);
-  const selectedCrop = params.get("crop") || "Wheat";
-  const quantity = Number(params.get("qty")) || 100;
-
-  document.getElementById("cropTitle").innerText = `Market Matches for: ${selectedCrop}`;
-
-  // Sirf tab matching hogi jab kisi buyer ne requirement post ki ho
-  const allBuyerReqs = JSON.parse(localStorage.getItem("krishi_buyer_reqs")) || [];
-  const matches = allBuyerReqs.filter(b => b.crop.toLowerCase() === selectedCrop.toLowerCase());
-
-  // Agar koi match nahi mila toh clean message
-  if (matches.length === 0) {
+  const storedRecommendation = sessionStorage.getItem("krishi_last_recommendation");
+  if (!storedRecommendation) {
     container.innerHTML = `
-      <div class="card-box text-center" style="grid-column: 1 / -1; padding: 40px 20px;">
-        <h3 style="color: var(--text-muted); margin-bottom: 10px;">No Matching Buyers Found</h3>
-        <p class="text-muted" style="font-size: 14px; max-width: 520px; margin: 0 auto;">
-          Currently, no buyer has posted a requirement for <strong>${selectedCrop}</strong>. 
-          As soon as a buyer submits a requirement matching your produce, their offer will appear here.
-        </p>
+      <div class="card-box text-center" style="grid-column: 1 / -1;">
+        <h3 class="text-primary">No market analysis found</h3>
+        <p class="text-muted">Add a crop first to compare suitable markets.</p>
       </div>
     `;
     return;
   }
 
-  // Real buyer milne par card render hoga
-  container.innerHTML = "";
-  matches.forEach((buyer) => {
-    const price = buyer.price || 0;
-    const location = buyer.location || "Maharashtra Hub";
-    const totalAmount = price * quantity;
+  const analysis = JSON.parse(storedRecommendation);
+  const selectedCrop = analysis.result.crop;
+  const recommendation = analysis.result.recommendation;
+  const alternatives = analysis.result.alternatives || [];
+  const quantity = analysis.result.quantity_kg;
 
-    container.innerHTML += `
-      <div class="result-card">
-        <h3>Buyer Requirement</h3>
-        <p class="buyer-price">₹${price} / kg</p>
-        
-        <div class="detail-row">
-          <span>Required Crop:</span>
-          <strong>${buyer.crop}</strong>
-        </div>
-        <div class="detail-row">
-          <span>Needed Quantity:</span>
-          <strong>${buyer.quantity} kg</strong>
-        </div>
-        <div class="detail-row">
-          <span>Delivery Hub:</span>
-          <strong>${location}</strong>
-        </div>
-        <div class="detail-row profit-row">
-          <span>Total Offer Value (${quantity}kg):</span>
-          <strong class="profit-val">₹${totalAmount}</strong>
-        </div>
+  document.getElementById("cropTitle").innerText = `Market Matches for: ${selectedCrop}`;
 
-        <button class="btn btn-primary btn-full" onclick="alert('Offer Details:\\nCrop: ${buyer.crop}\\nDelivery Location: ${location}\\nOffered Rate: ₹${price}/kg')">
-          Accept & Connect
-        </button>
-      </div>
-    `;
+  const renderMarketCard = (market, isRecommended) => `
+    <div class="result-card${isRecommended ? " recommended-card" : ""}">
+      ${isRecommended ? '<p class="market-badge">Recommended Market</p>' : "<h3>Alternative Market</h3>"}
+      <h3>${market.market_name}</h3>
+      <p class="buyer-price">₹${market.price_per_kg.toFixed(2)} / kg</p>
+      <div class="detail-row"><span>Distance:</span><strong>${market.distance_km} km</strong></div>
+      <div class="detail-row"><span>Mandi modal price:</span><strong>₹${market.modal_price_per_quintal} / quintal</strong></div>
+      <div class="detail-row"><span>Transport cost:</span><strong class="fare-deduct">₹${market.transport_cost_per_kg.toFixed(2)} / kg</strong></div>
+      <div class="detail-row"><span>Net price:</span><strong>₹${market.net_price_per_kg.toFixed(2)} / kg</strong></div>
+      <div class="detail-row profit-row"><span>Estimated realisation (${quantity}kg):</span><strong class="profit-val">₹${market.estimated_net_realisation.toFixed(2)}</strong></div>
+    </div>
+  `;
+
+  container.innerHTML = renderMarketCard(recommendation, true);
+  alternatives.forEach((market) => {
+    container.innerHTML += renderMarketCard(market, false);
   });
 }
