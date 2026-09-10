@@ -263,5 +263,5 @@ if __name__ == "__main__":
         
         ingest_data(
             state="Maharashtra",
-            commodity="Onion"
+            commodity="Tomato"
         )
