@@ -1,7 +1,13 @@
 import os
 import logging
 import requests
+import sys
 from datetime import datetime
+from pathlib import Path
+from dotenv import load_dotenv
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+load_dotenv()
 
 from app import app
 from extentions import db
@@ -23,6 +29,11 @@ def fetch_market_data(
     offset=0,
     limit=100
 ):
+    if not API_KEY:
+        raise RuntimeError(
+            "DATA_GOV_API_KEY is not set. Add it to backend/.env before ingesting."
+        )
+
     params = {
         "api-key": API_KEY,
         "format": "json",
@@ -47,7 +58,13 @@ def fetch_market_data(
 
     response.raise_for_status()
 
-    return response.json()
+    data = response.json()
+    if not isinstance(data, dict) or "records" not in data:
+        raise RuntimeError(
+            f"Government API returned no records payload: {data}"
+        )
+
+    return data
 
 
 def fetch_all_market_data(
@@ -258,6 +275,7 @@ def ingest_data(
     print("--------------------------------")
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
 
     with app.app_context():
         

@@ -21,6 +21,16 @@ async function loadMatchResults() {
 
   document.getElementById("cropTitle").innerText = `Market Matches for: ${selectedCrop}`;
 
+  if (!recommendation) {
+    container.innerHTML = `
+      <div class="card-box text-center" style="grid-column: 1 / -1;">
+        <h3 class="text-primary">No Profitable Markets Found</h3>
+        <p class="text-muted">${analysis.result.explanation}</p>
+      </div>
+    `;
+    return;
+  }
+
   const renderMarketCard = (market, isRecommended) => `
     <div class="result-card${isRecommended ? " recommended-card" : ""}">
       ${isRecommended ? '<p class="market-badge">Recommended Market</p>' : "<h3>Alternative Market</h3>"}
