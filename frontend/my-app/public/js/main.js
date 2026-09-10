@@ -8,11 +8,11 @@ async function loadMatchResults() {
 
   document.getElementById("cropTitle").innerText = `Market Matches for: ${selectedCrop}`;
 
-  // Sirf tab matching hogi jab kisi buyer ne requirement post ki ho
+  
   const allBuyerReqs = JSON.parse(localStorage.getItem("krishi_buyer_reqs")) || [];
   const matches = allBuyerReqs.filter(b => b.crop.toLowerCase() === selectedCrop.toLowerCase());
 
-  // Agar koi match nahi mila toh clean message
+  
   if (matches.length === 0) {
     container.innerHTML = `
       <div class="card-box text-center" style="grid-column: 1 / -1; padding: 40px 20px;">
@@ -26,7 +26,7 @@ async function loadMatchResults() {
     return;
   }
 
-  // Real buyer milne par card render hoga
+  
   container.innerHTML = "";
   matches.forEach((buyer) => {
     const price = buyer.price || 0;

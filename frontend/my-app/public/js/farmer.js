@@ -21,7 +21,6 @@ function loadFarmerCrops() {
 
   const userCrops = JSON.parse(localStorage.getItem("krishi_farmer_crops")) || [];
   
-  // Real buyer demands read karega jo add-requirement.html se aayi hain
   const buyerReqs = JSON.parse(localStorage.getItem("krishi_buyer_reqs")) || [];
 
   const countElem = document.getElementById("statCropCount");
@@ -30,14 +29,12 @@ function loadFarmerCrops() {
 
   if (countElem) countElem.innerText = `${userCrops.length} Items`;
 
-  // Filter: Sirf wahi buyer demand count karega jo farmer ke listed crops se match karti ho
   let matchedBuyerCount = 0;
   userCrops.forEach((c) => {
     matchedBuyerCount += buyerReqs.filter((b) => b.crop.toLowerCase() === c.name.toLowerCase()).length;
   });
   if (demandElem) demandElem.innerText = `${matchedBuyerCount} Buyers`;
 
-  // Dynamic Average Price calculation
   if (avgRateElem) {
     if (userCrops.length === 0) {
       avgRateElem.innerText = "₹0 / kg";

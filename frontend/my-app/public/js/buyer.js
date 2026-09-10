@@ -2,7 +2,6 @@ function loadBuyerReqs() {
   const tableBody = document.getElementById("reqTableBody");
   if (!tableBody) return;
 
-  // Ab koi default array nahi hai, sirf stored demands read karega
   const storedReqs = JSON.parse(localStorage.getItem("krishi_buyer_reqs")) || [];
   tableBody.innerHTML = "";
 
