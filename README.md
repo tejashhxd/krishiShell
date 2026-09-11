@@ -37,12 +37,11 @@ krishiShell/
 │   └── .env
 │
 └── frontend/
-    └── my-app/
-        ├── public/
-        │   ├── pages/
-        │   ├── js/
-        │   └── css/
-        └── package.json
+    ├── index.html
+    └── public/
+        ├── pages/
+        ├── js/
+        └── css/
 ```
 
 ## Technologies
@@ -71,7 +70,6 @@ The frontend farmer flow uses static HTML, CSS, and JavaScript. React is not use
 - Python 3.13 or compatible Python version
 - PostgreSQL database
 - Government API key from data.gov.in
-- Node.js and npm, if using the Vite development server
 
 ## Backend Setup
 
@@ -134,31 +132,16 @@ Expected response:
 Navigate to the frontend directory:
 
 ```powershell
-cd frontend/my-app
+cd frontend
 ```
 
-Install dependencies if required:
-
-```powershell
-npm install
-```
-
-Start the frontend development server:
-
-```powershell
-npm run dev
-```
-
-The frontend is usually available at:
-
-```text
-http://127.0.0.1:5173
-```
+Open `frontend/index.html` directly in a browser, or serve the `frontend/`
+directory with any static file server such as VS Code Live Server.
 
 The farmer pages are located in:
 
 ```text
-frontend/my-app/public/pages/
+frontend/public/pages/
 ```
 
 Important pages:
