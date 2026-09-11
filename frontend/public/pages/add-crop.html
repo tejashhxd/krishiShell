@@ -26,14 +26,9 @@
       <form onsubmit="handleAddCrop(event)">
         <div class="form-group">
           <label for="cropName">Crop Name</label>
-          <select id="cropName" onchange="updateMandiRateBadge()" required>
+          <select id="cropName" required>
             <option value="">Loading crops...</option>
           </select>
-          
-          <div class="live-rate-badge">
-            <span>Official APMC Mandi Rate:</span>
-            <strong id="liveMandiPrice">₹32 / kg</strong>
-          </div>
         </div>
 
         <div class="form-group">

@@ -1,11 +1,3 @@
-const REALTIME_MANDI_RATES = {
-  Tomato: 32,
-  Potato: 22,
-  Onion: 48,
-  Wheat: 28,
-  Mustard: 85
-};
-
 function showFormMessage(message) {
   const messageElement = document.getElementById("formMessage");
   if (messageElement) {
@@ -23,21 +15,10 @@ async function loadCropOptions() {
     cropSelect.innerHTML = crops.map((crop) =>
       `<option value="${crop.id}" data-crop-name="${crop.name}">${crop.name}</option>`
     ).join("");
-    updateMandiRateBadge();
   } catch (error) {
     cropSelect.innerHTML = '<option value="">Unable to load crops</option>';
     showFormMessage(error.message);
   }
-}
-
-function updateMandiRateBadge() {
-  const cropSelect = document.getElementById("cropName");
-  const priceDisplay = document.getElementById("liveMandiPrice");
-  if (!cropSelect || !priceDisplay) return;
-
-  const cropName = cropSelect.selectedOptions[0]?.dataset.cropName;
-  const rate = REALTIME_MANDI_RATES[cropName] || 25;
-  priceDisplay.innerText = `₹${rate} / kg`;
 }
 
 async function loadFarmerCrops() {
@@ -56,7 +37,6 @@ async function loadFarmerCrops() {
 
   const countElem = document.getElementById("statCropCount");
   const demandElem = document.getElementById("statDemandCount");
-  const avgRateElem = document.getElementById("statAvgRate");
 
   if (countElem) countElem.innerText = `${userCrops.length} Items`;
 
@@ -65,19 +45,6 @@ async function loadFarmerCrops() {
     matchedBuyerCount += buyerReqs.filter((b) => b.crop.toLowerCase() === c.name.toLowerCase()).length;
   });
   if (demandElem) demandElem.innerText = `${matchedBuyerCount} Buyers`;
-
-  if (avgRateElem) {
-    if (userCrops.length === 0) {
-      avgRateElem.innerText = "₹0 / kg";
-    } else {
-      let totalPrice = 0;
-      userCrops.forEach((item) => {
-        totalPrice += (REALTIME_MANDI_RATES[item.name] || 25);
-      });
-      const dynamicAvg = (totalPrice / userCrops.length).toFixed(1);
-      avgRateElem.innerText = `₹${dynamicAvg} / kg`;
-    }
-  }
 
   tableBody.innerHTML = "";
   if (userCrops.length === 0) {
