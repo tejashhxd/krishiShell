@@ -1,37 +1,51 @@
 async function loadMatchResults() {
   const container = document.getElementById("resultsList");
   if (!container) return;
-
-  const storedRecommendation = sessionStorage.getItem("krishi_last_recommendation");
-  if (!storedRecommendation) {
-    container.innerHTML = `
+  const loading = document.getElementById("resultsLoading");
+  try {
+    const listingId = new URLSearchParams(window.location.search).get("listing_id");
+    let analysis;
+    if (listingId) {
+      const listing = await window.fetchFarmerListing(listingId);
+      const result = await window.analyzeFarmerCrop({
+        crop_id: listing.crop_id,
+        quantity_kg: listing.quantity,
+        latitude: listing.latitude,
+        longitude: listing.longitude
+      });
+      analysis = { listing, result };
+    } else {
+      const storedRecommendation = sessionStorage.getItem("krishi_last_recommendation");
+      if (storedRecommendation) analysis = JSON.parse(storedRecommendation);
+    }
+    if (!analysis) {
+      container.innerHTML = `
       <div class="card-box text-center" style="grid-column: 1 / -1;">
         <h3 class="text-primary">No market analysis found</h3>
         <p class="text-muted">Add a crop first to compare suitable markets.</p>
       </div>
     `;
-    return;
-  }
+      return;
+    }
 
-  const analysis = JSON.parse(storedRecommendation);
-  const selectedCrop = analysis.result.crop;
-  const recommendation = analysis.result.recommendation;
-  const alternatives = analysis.result.alternatives || [];
-  const quantity = analysis.result.quantity_kg;
+    const selectedCrop = analysis.result.crop;
+    const recommendation = analysis.result.recommendation;
+    const alternatives = analysis.result.alternatives || [];
+    const quantity = analysis.result.quantity_kg;
 
-  document.getElementById("cropTitle").innerText = `Market Matches for: ${selectedCrop}`;
+    document.getElementById("cropTitle").innerText = `Market Matches for: ${selectedCrop}`;
 
-  if (!recommendation) {
-    container.innerHTML = `
+    if (!recommendation) {
+      container.innerHTML = `
       <div class="card-box text-center" style="grid-column: 1 / -1;">
         <h3 class="text-primary">No Profitable Markets Found</h3>
         <p class="text-muted">${analysis.result.explanation}</p>
       </div>
     `;
-    return;
-  }
+      return;
+    }
 
-  const renderMarketCard = (market, isRecommended) => `
+    const renderMarketCard = (market, isRecommended) => `
     <div class="result-card${isRecommended ? " recommended-card" : ""}">
       ${isRecommended ? '<p class="market-badge">Recommended Market</p>' : "<h3>Alternative Market</h3>"}
       <h3>${market.market_name}</h3>
@@ -44,8 +58,14 @@ async function loadMatchResults() {
     </div>
   `;
 
-  container.innerHTML = renderMarketCard(recommendation, true);
-  alternatives.forEach((market) => {
-    container.innerHTML += renderMarketCard(market, false);
-  });
+    container.innerHTML = renderMarketCard(recommendation, true);
+    alternatives.forEach((market) => {
+      container.innerHTML += renderMarketCard(market, false);
+    });
+  } catch (error) {
+    container.innerHTML = `<div class="card-box text-center" style="grid-column: 1 / -1;"><h3 class="text-primary">Unable to load market analysis</h3><p class="text-muted">${error.message}</p></div>`;
+  } finally {
+    if (loading) loading.hidden = true;
+    container.hidden = false;
+  }
 }

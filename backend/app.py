@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from sqlalchemy import text
 from flask_cors import CORS
 from extentions import db
 from models import (
@@ -10,6 +11,8 @@ from models import (
 )
 from routes.market_routes import market_bp
 from routes.recommendation_routes import recommendation_bp
+from routes.auth_routes import auth_bp
+from routes.listing_routes import listing_bp
 
 from config import Config
 
@@ -20,10 +23,17 @@ def create_app():
     app.config.from_object(Config)
     app.register_blueprint(market_bp)
     app.register_blueprint(recommendation_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(listing_bp)
     
     db.init_app(app)
     
-    CORS(app)
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": "*"}},
+        methods=["GET", "POST", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type"],
+    )
     
     @app.get("/api/health")
     def health():
@@ -45,6 +55,11 @@ def create_app():
         
     with app.app_context():
         db.create_all()
+        if db.engine.dialect.name == "postgresql":
+            db.session.execute(text("ALTER TABLE farmers ALTER COLUMN password TYPE VARCHAR(255)"))
+            db.session.execute(text("ALTER TABLE crop_listings ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION"))
+            db.session.execute(text("ALTER TABLE crop_listings ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION"))
+            db.session.commit()
         
     return app
 

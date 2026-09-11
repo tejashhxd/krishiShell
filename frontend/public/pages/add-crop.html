@@ -6,7 +6,7 @@
   <title>Add Crop - KrishiShell</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body onload="loadCropOptions()">
+<body onload="if (checkAuth()) loadCropOptions()">
 
   <header class="navbar">
     <a href="farmer-dashboard.html" class="logo">
@@ -57,6 +57,7 @@
     </div>
   </main>
 
+  <script src="../js/auth.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/farmer.js"></script>
 </body>

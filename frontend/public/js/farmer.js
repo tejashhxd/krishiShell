@@ -40,13 +40,19 @@ function updateMandiRateBadge() {
   priceDisplay.innerText = `₹${rate} / kg`;
 }
 
-function loadFarmerCrops() {
+async function loadFarmerCrops() {
   const tableBody = document.getElementById("cropTableBody");
   if (!tableBody) return;
 
-  const userCrops = JSON.parse(localStorage.getItem("krishi_farmer_crops")) || [];
+  let userCrops;
+  try {
+    userCrops = await window.fetchFarmerListings();
+  } catch (error) {
+    showFormMessage(error.message);
+    return;
+  }
   
-  const buyerReqs = JSON.parse(localStorage.getItem("krishi_buyer_reqs")) || [];
+  const buyerReqs = JSON.parse(localStorage.getItem(farmerStorageKey("krishi_buyer_reqs"))) || [];
 
   const countElem = document.getElementById("statCropCount");
   const demandElem = document.getElementById("statDemandCount");
@@ -88,7 +94,7 @@ function loadFarmerCrops() {
         <td>${item.date}</td>
         <td>
           <div class="table-actions">
-            <a href="results.html?crop=${encodeURIComponent(item.name)}&qty=${item.quantity}" class="btn btn-outline btn-sm">
+            <a href="results.html?listing_id=${item.id}" class="btn btn-outline btn-sm">
               View Matches
             </a>
             <button type="button" class="btn btn-danger btn-sm" onclick="deleteFarmerCrop(${index})">
@@ -101,12 +107,11 @@ function loadFarmerCrops() {
   });
 }
 
-function deleteFarmerCrop(index) {
-  const userCrops = JSON.parse(localStorage.getItem("krishi_farmer_crops")) || [];
-  if (!Number.isInteger(index) || index < 0 || index >= userCrops.length) return;
-
-  userCrops.splice(index, 1);
-  localStorage.setItem("krishi_farmer_crops", JSON.stringify(userCrops));
+async function deleteFarmerCrop(index) {
+  const userCrops = await window.fetchFarmerListings();
+  const listing = userCrops[index];
+  if (!listing) return;
+  await window.deleteFarmerListing(listing.id);
   loadFarmerCrops();
 }
 
@@ -146,15 +151,22 @@ async function handleAddCrop(event) {
       longitude: coordinates.longitude
     });
 
-    const currentList = JSON.parse(localStorage.getItem("krishi_farmer_crops")) || [];
-    currentList.unshift(newListing);
-    localStorage.setItem("krishi_farmer_crops", JSON.stringify(currentList));
+    const user = JSON.parse(localStorage.getItem("krishiUser") || "null");
+    const savedListing = await window.postCropListing({
+      farmer_id: user?.id,
+      crop_id: cropId,
+      quantity_kg: quantity,
+      location,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+      date
+    });
     sessionStorage.setItem("krishi_last_recommendation", JSON.stringify({
-      listing: newListing,
+      listing: savedListing,
       result: recommendation
     }));
 
-    window.location.href = `results.html?crop=${encodeURIComponent(name)}&qty=${quantity}`;
+    window.location.href = `results.html?listing_id=${savedListing.id}`;
   } catch (error) {
     showFormMessage(error.message);
     if (submitButton) {

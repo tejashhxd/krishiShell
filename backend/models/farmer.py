@@ -17,14 +17,7 @@ class Farmer(db.Model):
         db.String(20)
     )
     
-    location = db.Column(
-        db.String(150)
-    )
-    
-    latitude = db.Column(
-        db.Float
-    )
-    
-    longitude = db.Column(
-        db.Float
+    password = db.Column(
+        db.String(255),
+        nullable = False
     )

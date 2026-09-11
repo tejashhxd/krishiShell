@@ -18,30 +18,31 @@
 
   <div class="container form-card-container">
     <div class="card-box">
-      <h2 id="loginTitle" class="text-primary text-center">Login</h2>
-      <p id="loginSubtitle" class="text-center text-muted" style="margin-bottom: 20px;">Please sign in to proceed.</p>
+      <h2 id="loginTitle" class="text-primary text-center">Create Farmer Account</h2>
+      <p id="loginSubtitle" class="text-center text-muted" style="margin-bottom: 20px;">Create an account to continue.</p>
       
       <form onsubmit="handleLogin(event)">
-        <input type="hidden" id="userRole" value="farmer">
-
         <div class="form-group">
-          <label>Full Name</label>
+          <label for="userName">Full Name</label>
           <input type="text" id="userName" placeholder="e.g. Shubham Jha" required>
         </div>
 
         <div class="form-group">
-          <label>Mobile Number / Email</label>
+          <label for="userContact">Mobile Number</label>
           <input type="text" id="userContact" placeholder="e.g. 9876543210" required>
         </div>
 
         <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="userPass" placeholder="••••••••" required>
+          <label for="userPass">Password</label>
+          <input type="password" id="userPass" minlength="8" placeholder="At least 8 characters" required>
         </div>
 
         <div id="loginMessage" class="form-message" role="alert" aria-live="polite"></div>
-        <button type="submit" class="btn btn-primary btn-full">Continue to Dashboard</button>
+        <button id="authSubmit" type="submit" class="btn btn-primary btn-full">Create Account</button>
       </form>
+      <p class="text-center" style="margin-top: 16px;">
+        <button id="authModeToggle" type="button" class="btn btn-outline btn-sm">Already have an account? Sign in</button>
+      </p>
     </div>
   </div>
 
@@ -49,16 +50,9 @@
   <script>
     function setupSelectedRole() {
       const params = new URLSearchParams(window.location.search);
-      const role = params.get('role');
-      const hiddenRole = document.getElementById('userRole');
       const titleElem = document.getElementById('loginTitle');
-
-      if (role === 'buyer') {
-        hiddenRole.value = 'buyer';
-        titleElem.innerText = 'Buyer Login';
-      } else {
-        hiddenRole.value = 'farmer';
-        titleElem.innerText = 'Farmer Login';
+      if (params.get('role') === 'buyer') {
+        titleElem.innerText = 'Farmer accounts only';
       }
     }
   </script>

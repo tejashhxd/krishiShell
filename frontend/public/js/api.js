@@ -31,20 +31,53 @@ async function fetchMatchingBuyers(crop) {
 }
 
 async function postCropListing(payload) {
-  try {
-    const response = await fetch(`${API_BASE_URL}/crops`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    return await response.json();
-  } catch (err) {
-    let list = JSON.parse(localStorage.getItem("krishi_farmer_crops")) || [];
-    list.unshift(payload);
-    localStorage.setItem("krishi_farmer_crops", JSON.stringify(list));
-    return { status: "local_saved" };
+  const response = await fetch(`${API_BASE_URL}/listings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "Unable to save crop listing.");
+  }
+  return result.data;
+}
+
+async function fetchFarmerListings() {
+  const user = JSON.parse(localStorage.getItem("krishiUser") || "null");
+  if (!user?.id) throw new Error("Please sign in again.");
+  const response = await fetch(`${API_BASE_URL}/listings?farmer_id=${user.id}`);
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "Unable to load crop listings.");
   }
 
+  return result.data;
+}
+
+async function fetchFarmerListing(listingId) {
+  const user = JSON.parse(localStorage.getItem("krishiUser") || "null");
+  const response = await fetch(
+    `${API_BASE_URL}/listings/${encodeURIComponent(listingId)}?farmer_id=${user?.id}`
+  );
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "Unable to load crop listing.");
+  }
+  return result.data;
+}
+
+async function deleteFarmerListing(listingId) {
+  const user = JSON.parse(localStorage.getItem("krishiUser") || "null");
+  const response = await fetch(`${API_BASE_URL}/listings/${listingId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ farmer_id: user?.id })
+  });
+  const result = await response.json();
+  if (!response.ok || !result.success) {
+    throw new Error(result.error || "Unable to delete crop listing.");
+  }
 }
 
 async function analyzeFarmerCrop(payload) {

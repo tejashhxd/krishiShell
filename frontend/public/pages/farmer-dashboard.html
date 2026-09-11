@@ -6,7 +6,7 @@
   <title>Farmer Dashboard - KrishiShell</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body onload="loadFarmerCrops()">
+<body onload="if (checkAuth()) loadFarmerCrops()">
 
   <header class="navbar">
     <a href="../../index.html" class="logo">
